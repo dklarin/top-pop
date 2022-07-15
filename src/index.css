@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "Dreamland";
+  src: local("Dreamland"),
+   url("./fonts/dreamland-font/Dreamland-0vWd.ttf") format("truetype");
+  font-weight: bold;
+  }

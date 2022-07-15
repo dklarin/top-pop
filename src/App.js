@@ -9,7 +9,7 @@ function App() {
   const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
-    async function fetchMoviesJSON() {
+    async function fetchTracksJSON() {
       const response = await fetch(
         "https://nameless-hollows-61775.herokuapp.com/https://api.deezer.com/chart"
       );
@@ -17,27 +17,14 @@ function App() {
       return deezer;
     }
 
-    fetchMoviesJSON().then((deezer) => {
+    fetchTracksJSON().then((deezer) => {
       setTracks(deezer.tracks.data);
     });
   }, []);
 
-  const columns = [
-    {
-      Header: "First Name",
-      accessor: "title",
-    },
-    {
-      Header: "Last Name",
-      accessor: "link",
-    },
-  ];
-
-
-
   return (
     <div className="App">
-      <Layout data={tracks} columns={columns} />
+      <Layout data={tracks} />
     </div>
   );
 }

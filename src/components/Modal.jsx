@@ -7,11 +7,8 @@ const Modal = ({ setIsOpen, data }) => {
   var seconds;
 
   const timeChange = () => {
-    console.log(data.duration);
-
     minutes = Math.floor(data.duration / 60);
     seconds = data.duration - minutes * 60;
-    console.log("Minute:", minutes + ":" + seconds);
   };
 
   timeChange();
@@ -22,16 +19,24 @@ const Modal = ({ setIsOpen, data }) => {
       <div className={styles.centered}>
         <div className={styles.modal}>
           <div className={styles.modalHeader}>
-            <h5 className={styles.heading}>Dialog</h5>
+            <h5 className={styles.heading}>Song selected</h5>
           </div>
           <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
             <RiCloseLine style={{ marginBottom: "-3px" }} />
           </button>
           <div className={styles.modalContent}>
-            {/*Are you sure you want to delete the item?*/}
-            {data.position} -{data.title} -{data.artist.name} -{" "}
-            {minutes + ":" + seconds}
-            {console.log("Modal", data.title)}
+            <div>
+              <b>Redni broj:</b> {data.position}
+            </div>
+            <div>
+              <b>Naziv pjesme:</b> {data.title}
+            </div>
+            <div>
+              <b>Izvođač:</b> {data.artist.name}
+            </div>
+            <div>
+              <b>Trajanje:</b> {minutes + ":" + seconds}
+            </div>
           </div>
           <div className={styles.modalActions}>
             <div className={styles.actionsContainer}>
@@ -39,13 +44,7 @@ const Modal = ({ setIsOpen, data }) => {
                 className={styles.deleteBtn}
                 onClick={() => setIsOpen(false)}
               >
-                Delete
-              </button>
-              <button
-                className={styles.cancelBtn}
-                onClick={() => setIsOpen(false)}
-              >
-                Cancel
+                Close
               </button>
             </div>
           </div>

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import styles from "./App.module.css";
 import Modal from "./Modal";
 
 const Table = styled.table`
-  border: 2px solid forestgreen;
+  border: 2px solid #185adb;
   width: 800px;
   height: 200px;
+  margin: auto;
 `;
 
 const Th = styled.th`
@@ -15,85 +16,82 @@ const Th = styled.th`
 
 const Td = styled.td`
   text-align: left;
+  &:hover,
+  &:focus {
+    color: #185adb;
+  }
+  &:active {
+    color: red;
+  }
+  cursor: pointer;
 `;
 
-export const Layout = () => {
-  const [tracks, setTracks] = useState([]);
+export const Layout = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [track, setTrack] = useState();
-  const [sort, setSort] = useState(false);
-
-  useEffect(() => {
-    async function fetchMoviesJSON() {
-      const response = await fetch(
-        "https://nameless-hollows-61775.herokuapp.com/https://api.deezer.com/chart"
-      );
-      const deezer = await response.json();
-      return deezer;
-    }
-
-    fetchMoviesJSON().then((deezer) => {
-      setTracks(deezer.tracks.data);
-    });
-  }, []);
+  const [duration, setDuration] = useState(null);
 
   const rowSelect = (key) => {
-    console.log(tracks[key].artist);
-    setTrack(tracks[key]);
-    //setModal(false);
+    setTrack(data[key]);
   };
 
-  function GetSortOrder(prop) {
-    return function (a, b) {
-      if (a[prop] > b[prop]) {
-        return 1;
-      } else if (a[prop] < b[prop]) {
-        return -1;
-      }
-      return 0;
-    };
+  const timeChange = (time) => {
+    let minutes = Math.floor(time / 60);
+    let seconds = time - minutes * 60;
+    if (seconds < 10) {
+      return minutes + ":0" + seconds;
+    } else {
+      return minutes + ":" + seconds;
+    }
+  };
+
+  if (duration == null) {
+    data.sort((a, b) => parseFloat(a.position) - parseFloat(b.position));
+  } else if (duration === true) {
+    data.sort((a, b) => parseFloat(b.duration) - parseFloat(a.duration));
+  } else {
+    data.sort((a, b) => parseFloat(a.duration) - parseFloat(b.duration));
   }
-
-  ///tracks.sort(GetSortOrder("duration"));
-  /*tracks.sort(function (a, b) {
-    return parseFloat(a.duration) - parseFloat(b.duration);
-  });*/
-
-  //tracks.sort((a, b) => b.id - a.id);
-  sort
-    ? tracks.sort((a, b) => parseFloat(a.duration) - parseFloat(b.duration))
-    : // tracks.sort(GetSortOrder("duration"));
-
-      tracks.sort((a, b) => parseFloat(b.duration) - parseFloat(a.duration));
 
   return (
     <div>
-      <button className={styles.primaryBtn} onClick={() => setSort(!sort)}>
-        Open Modal
+      <div className="font-face-gm" style={{ marginTop: "2%" }}>
+        Top Pop app
+      </div>
+      <div>
+        <Table style={{ marginTop: "2%" }}>
+          <thead>
+            <tr>
+              <Th>Redni broj</Th>
+              <Th>Izvođač</Th>
+              <Th>Pjesma</Th>
+              <Th>Trajanje</Th>
+            </tr>
+          </thead>
+          {data.map((track, key) => {
+            return (
+              <tbody key={key} onClick={() => rowSelect(key)}>
+                <tr onClick={() => setIsOpen(true)}>
+                  <Td>{track.position}</Td>
+                  <Td>{track.artist.name}</Td>
+                  <Td>{track.title}</Td>
+                  <Td>{timeChange(track.duration)}</Td>
+                </tr>
+              </tbody>
+            );
+          })}
+        </Table>
+      </div>
+      <button
+        className={styles.primaryBtn}
+        onClick={() => setDuration(!duration)}
+      >
+        Sort Duration
+      </button>
+      <button className={styles.primaryBtn} onClick={() => setDuration(null)}>
+        Reset
       </button>
       {isOpen && <Modal setIsOpen={setIsOpen} data={track} />}
-      <Table>
-        <thead>
-          <tr>
-            <Th>Redni broj</Th>
-            <Th>Izvođač</Th>
-            <Th>Pjesma</Th>
-            <Th>Trajanje</Th>
-          </tr>
-        </thead>
-        {tracks.map((track, key) => {
-          return (
-            <tbody key={key} onClick={() => rowSelect(key)}>
-              <tr onClick={() => setIsOpen(true)}>
-                <Td>{track.position}</Td>
-                <Td>{track.artist.name}</Td>
-                <Td>{track.title}</Td>
-                <Td>{track.duration}</Td>
-              </tr>
-            </tbody>
-          );
-        })}
-      </Table>
     </div>
   );
 };
