@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import styles from "./App.module.css";
+import styles from "./Deezer.module.css";
 import Modal from "./Modal";
 
 const Table = styled.table`
@@ -14,7 +14,7 @@ const Th = styled.th`
   border-bottom: 1px solid black;
 `;
 
-const Td = styled.td`
+const Tr = styled.tr`
   text-align: left;
   &:hover,
   &:focus {
@@ -24,6 +24,10 @@ const Td = styled.td`
     color: red;
   }
   cursor: pointer;
+`;
+
+const Td = styled.td`
+  text-align: left;
 `;
 
 export const Layout = ({ data }) => {
@@ -55,28 +59,28 @@ export const Layout = ({ data }) => {
 
   return (
     <div>
-      <div className="font-face-gm" style={{ marginTop: "2%" }}>
-        Top Pop app
+      <div style={{ marginTop: "2%" }}>
+        <b>Top Pop app</b>
       </div>
       <div>
         <Table style={{ marginTop: "2%" }}>
           <thead>
             <tr>
-              <Th>Redni broj</Th>
-              <Th>Izvođač</Th>
-              <Th>Pjesma</Th>
-              <Th>Trajanje</Th>
+              <Th>No.</Th>
+              <Th>Artist</Th>
+              <Th>Song</Th>
+              <Th>Duration</Th>
             </tr>
           </thead>
           {data.map((track, key) => {
             return (
               <tbody key={key} onClick={() => rowSelect(key)}>
-                <tr onClick={() => setIsOpen(true)}>
+                <Tr onClick={() => setIsOpen(true)}>
                   <Td>{track.position}</Td>
                   <Td>{track.artist.name}</Td>
                   <Td>{track.title}</Td>
                   <Td>{timeChange(track.duration)}</Td>
-                </tr>
+                </Tr>
               </tbody>
             );
           })}

@@ -3,15 +3,15 @@ import styles from "./Modal.module.css";
 import { RiCloseLine } from "react-icons/ri";
 
 const Modal = ({ setIsOpen, data }) => {
-  var minutes;
-  var seconds;
-
-  const timeChange = () => {
-    minutes = Math.floor(data.duration / 60);
-    seconds = data.duration - minutes * 60;
+  const timeChange = (time) => {
+    let minutes = Math.floor(time / 60);
+    let seconds = time - minutes * 60;
+    if (seconds < 10) {
+      return minutes + ":0" + seconds;
+    } else {
+      return minutes + ":" + seconds;
+    }
   };
-
-  timeChange();
 
   return (
     <>
@@ -26,16 +26,17 @@ const Modal = ({ setIsOpen, data }) => {
           </button>
           <div className={styles.modalContent}>
             <div>
-              <b>Redni broj:</b> {data.position}
+              <b>No:</b> {data.position}
             </div>
             <div>
-              <b>Naziv pjesme:</b> {data.title}
+              <b>Song title:</b> {data.title}
             </div>
             <div>
-              <b>Izvođač:</b> {data.artist.name}
+              <b>Artist:</b> {data.artist.name}
             </div>
             <div>
-              <b>Trajanje:</b> {minutes + ":" + seconds}
+              <b>Duration: </b>
+              {timeChange(data.duration)}
             </div>
           </div>
           <div className={styles.modalActions}>
