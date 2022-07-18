@@ -1,7 +1,7 @@
 # Top-pop app
 
-# To install packages
+## To install packages
 * yarn install
 
-# To run app
+## To run app
 * yarn start
