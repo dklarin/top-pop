@@ -34,6 +34,7 @@ export const Layout = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [track, setTrack] = useState();
   const [duration, setDuration] = useState(null);
+  let newData = [...data];
 
   const rowSelect = (key) => {
     setTrack(data[key]);
@@ -50,14 +51,14 @@ export const Layout = ({ data }) => {
   };
 
   if (duration == null) {
-    data.sort((a, b) => parseFloat(a.position) - parseFloat(b.position));
+    newData.sort((a, b) => parseFloat(a.position) - parseFloat(b.position));
   } else if (duration === true) {
-    data.sort((a, b) => parseFloat(b.duration) - parseFloat(a.duration));
+    newData.sort((a, b) => parseFloat(b.duration) - parseFloat(a.duration));
   } else {
-    data.sort((a, b) => parseFloat(a.duration) - parseFloat(b.duration));
+    newData.sort((a, b) => parseFloat(a.duration) - parseFloat(b.duration));
   }
 
-  return (
+  return newData.length !== 0 ? (
     <div>
       <div style={{ marginTop: "2%" }}>
         <b>Top Pop app</b>
@@ -72,7 +73,7 @@ export const Layout = ({ data }) => {
               <Th>Duration</Th>
             </tr>
           </thead>
-          {data.map((track, key) => {
+          {newData.map((track, key) => {
             return (
               <tbody key={key} onClick={() => rowSelect(key)}>
                 <Tr onClick={() => setIsOpen(true)}>
@@ -97,5 +98,7 @@ export const Layout = ({ data }) => {
       </button>
       {isOpen && <Modal setIsOpen={setIsOpen} data={track} />}
     </div>
+  ) : (
+    <div>Loading...</div>
   );
 };
